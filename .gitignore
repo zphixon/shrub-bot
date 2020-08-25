@@ -1,1 +1,4 @@
 arm*
+__pycache__/
+send_shrub_email.py
+bot.log

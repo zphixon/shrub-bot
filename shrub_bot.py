@@ -9,11 +9,14 @@ import datetime
 import sys
 import _thread
 import time
+import subprocess
 from concurrent.futures import ProcessPoolExecutor
+#from send_shrub_email import send_email
 
 #yag = yagmail.SMTP('zack.zslash')
 
 bot = commands.Bot(command_prefix='!')
+#discord.opus.load_opus("libopus.so.0")
 
 @bot.event
 @asyncio.coroutine
@@ -136,79 +139,30 @@ def card():
 
 @bot.command()
 @asyncio.coroutine
+def sauce():
+    """
+    Invoke the spirit of the Sauce Hoss.
+    """
+    yield from bot.say("Ｐ Ｒ Ｏ Ｔ Ｅ Ｃ Ｔ   Ｔ Ｈ Ｅ   Ｓ Ａ Ｕ Ｃ Ｅ")
+
+@bot.command()
+@asyncio.coroutine
 def draw():
     """
-    Draw a playing card
+    Draw a playing card.
     """
-    cards = [
-            # aces
-            "http://i.imgur.com/YoEexxn.png",
-            "http://i.imgur.com/wVEvUvN.png",
-            "http://i.imgur.com/MaNid5O.png",
-            "http://i.imgur.com/HFv2fXi.png",
-            # 2
-            "http://i.imgur.com/3NpspDX.png",
-            "http://i.imgur.com/JOjPCaq.png",
-            "http://i.imgur.com/wBBiVMR.png",
-            "http://i.imgur.com/1ji8NOS.png",
-            # 3
-            "http://i.imgur.com/aUaLoEv.png",
-            "http://i.imgur.com/y6yjrO5.png",
-            "http://i.imgur.com/wAFgz9c.png",
-            "http://i.imgur.com/31A5OI0.png",
-            # 4
-            "http://i.imgur.com/Srdqkwk.png",
-            "http://i.imgur.com/H5ngCWy.png",
-            "http://i.imgur.com/728NsaQ.png",
-            "http://i.imgur.com/u98A5cf.png",
-            # 5
-            "http://i.imgur.com/ntvq876.png",
-            "http://i.imgur.com/mSc6nYc.png",
-            "http://i.imgur.com/mga6Pwc.png",
-            "http://i.imgur.com/uGctejO.png",
-            # 6
-            "http://i.imgur.com/fTEueBh.png",
-            "http://i.imgur.com/geZkgpa.png",
-            "http://i.imgur.com/R04qUaI.png",
-            "http://i.imgur.com/EaGCX5z.png",
-            # 7
-            "http://i.imgur.com/BloHFfl.png",
-            "http://i.imgur.com/qdKmt4R.png",
-            "http://i.imgur.com/Io8HAVS.png",
-            "http://i.imgur.com/Nfsr3Uy.png",
-            # 8
-            "http://i.imgur.com/RXBK5ZR.png",
-            "http://i.imgur.com/9fQ4hfk.png",
-            "http://i.imgur.com/nDvS4zI.png",
-            "http://i.imgur.com/gAhkqTH.png",
-            # 9
-            "http://i.imgur.com/3v8xc80.png",
-            "http://i.imgur.com/ShBTAiw.png",
-            "http://i.imgur.com/6OWglP7.png",
-            "http://i.imgur.com/j0ub25i.png",
-            # 10
-            "http://i.imgur.com/ngqZ7OY.png",
-            "http://i.imgur.com/nPMfQm0.png",
-            "http://i.imgur.com/DoJYRyR.png",
-            "http://i.imgur.com/EbR78Wz.png",
-            # jack
-            "http://i.imgur.com/ACsM21c.png",
-            "http://i.imgur.com/l0zeouz.png",
-            "http://i.imgur.com/tHFcp75.png",
-            "http://i.imgur.com/pq5hDJy.png",
-            # queen
-            "http://i.imgur.com/glOAmk1.png",
-            "http://i.imgur.com/3LUosvb.png",
-            "http://i.imgur.com/mn3BodI.png",
-            "http://i.imgur.com/JFTJabr.png",
-            # king
-            "http://i.imgur.com/RebKlGi.png",
-            "http://i.imgur.com/8Dqnrdi.png",
-            "http://i.imgur.com/tzMj7G1.png",
-            "http://i.imgur.com/OAr6Yk5.png",
-            # jokers?
-            ]
-    yield from bot.say(random.choice(cards))
+    suits = ["clubs", "hearts", "diamonds", "spades"]
+    nums = ["ace", "2", "3", "4", "5", "6", "7", "8",
+            "9", "10", "jack", "queen", "king"]
+    yield from bot.say(random.choice(nums) + " of " + random.choice(suits))
+
+@bot.command()
+@asyncio.coroutine
+def uptime():
+    """
+    Get shrub_bot's uptime.
+    """
+    yield from bot.say("Uptime: " + str(subprocess.check_output(["uptime", "-p"]))[2:-3])
 
 @bot.event
 @asyncio.coroutine
@@ -225,12 +179,16 @@ def on_message(message):
             "screech"]
     for members in message.mentions:
         if message.author.name != "shrub_bot" and members.name == "shrub_bot":
-            yield from bot.send_message(message.channel, message.content.replace("<@" + str(bot.user.id) + ">", "").upper() + " " + random.choice(noises))
+            yield from bot.send_message(message.channel, message.content.replace("<@!" + str(bot.user.id) + ">", "").upper() + " " + random.choice(noises))
             break
 
-#try:
-bot.run("afdsadf@airmail.cc", "SHRUB_BOT2222")
-#except Exception as e:
-#    traceback.print_exc()
-#    yag.send('zackh@firemail.cc', 'shrub_bot is down', 'shrub_bot has crashed.\n\n' + traceback.format_exc())
+#bot.run("afdsadf@airmail.cc", "SHRUB_BOT2222", bot=True)
+try:
+    #bot.connect()
+    bot.run("NDEzNDg1MDY5MTE0NTQwMDUy.DWZfjA.V69333vWvxIY7rWMh_4MWhJvzaw")
+except Exception:
+    pass # quality code
+
+#bot.logout()
+bot.close()
 
