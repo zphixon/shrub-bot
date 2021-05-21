@@ -4,7 +4,6 @@ import traceback
 import discord
 from discord.ext import commands
 import random
-import asyncio
 import datetime
 import sys
 import _thread
@@ -15,27 +14,25 @@ from concurrent.futures import ProcessPoolExecutor
 
 #yag = yagmail.SMTP('zack.zslash')
 
+#bot = discord.Client()
 bot = commands.Bot(command_prefix='!')
 #discord.opus.load_opus("libopus.so.0")
 
 @bot.event
-@asyncio.coroutine
-def on_ready():
+async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
 
 @bot.command()
-@asyncio.coroutine
-def test():
+async def test(ctx):
     """
     Verify shrub_bot is working.
     """
-    yield from bot.say("hello!")
+    await ctx.send("hello!")
 
 @bot.command()
-@asyncio.coroutine
-def parrot():
+async def parrot(ctx):
     """
     Show a parrot picture.
     """
@@ -51,11 +48,10 @@ def parrot():
             "https://i.redd.it/l00qvfi6am9x.jpg",
             "https://cdn.discordapp.com/attachments/264646094493843456/264646792354725898/amw.png",
             ]
-    yield from bot.say(random.choice(parrotURLs))
+    await ctx.send(random.choice(parrotURLs))
 
 @bot.command()
-@asyncio.coroutine
-def shrub():
+async def shrub(ctx):
     """
     Show a shrub picture.
     """
@@ -70,25 +66,23 @@ def shrub():
             "http://www.tedsgardens.com/images/plants/shrubs/Shrub_Arborvitae_HetzMidget.jpg",
             "http://www.clintar.com/img/clintar-landscaping-tip-shrub.png"
             ]
-    yield from bot.say(random.choice(shrubURLs))
+    await ctx.send(random.choice(shrubURLs))
 
 @bot.command()
-@asyncio.coroutine
-def roll(dice: str):
+async def roll(ctx, dice: str):
     """
     Roll some dice.
     """
     try:
         rolls, limit = map(int, dice.split("d"))
     except Exception:
-        yield from bot.say("Format must be NdN, e.g. 1d6")
+        await ctx.send("Format must be NdN, e.g. 1d6")
         return
     result = ", ".join(str(random.randint(1, limit)) for r in range(rolls))
-    yield from bot.say(result)
+    await ctx.send(result)
 
 @bot.command()
-@asyncio.coroutine
-def choose(*choices: str):
+async def choose(ctx, *choices: str):
     """
     Choose from some options.
     """
@@ -99,11 +93,10 @@ def choose(*choices: str):
             "I want",
             "The obvious choice is",
             "We should go with"]
-    yield from bot.say("{} {}".format(random.choice(maybes), random.choice(choices)))
+    await ctx.send("{} {}".format(random.choice(maybes), random.choice(choices)))
 
 @bot.command()
-@asyncio.coroutine
-def birb():
+async def birb(ctx):
     """
     Birdie wanna cracker? Good birdie.
     """
@@ -116,11 +109,10 @@ def birb():
             "flutter",
             "flap",
             "screech"]
-    yield from bot.say("{}".format(random.choice(noises)))
+    await ctx.send("{}".format(random.choice(noises)))
 
 @bot.command()
-@asyncio.coroutine
-def card():
+async def card(ctx):
     """
     Draw a GeothermalShrub card
     """
@@ -135,40 +127,38 @@ def card():
             "http://i.imgur.com/GB70icP.jpg",
             "http://i.imgur.com/toKDlm2.jpg",
             ]
-    yield from bot.say("{}".format(random.choice(cards)))
+    await ctx.send("{}".format(random.choice(cards)))
 
 @bot.command()
-@asyncio.coroutine
-def sauce():
+async def sauce(ctx):
     """
     Invoke the spirit of the Sauce Hoss.
     """
-    yield from bot.say("Ｐ Ｒ Ｏ Ｔ Ｅ Ｃ Ｔ   Ｔ Ｈ Ｅ   Ｓ Ａ Ｕ Ｃ Ｅ")
+    await ctx.send("Ｐ Ｒ Ｏ Ｔ Ｅ Ｃ Ｔ   Ｔ Ｈ Ｅ   Ｓ Ａ Ｕ Ｃ Ｅ")
 
 @bot.command()
-@asyncio.coroutine
-def draw():
+async def draw(ctx):
     """
     Draw a playing card.
     """
     suits = ["clubs", "hearts", "diamonds", "spades"]
     nums = ["ace", "2", "3", "4", "5", "6", "7", "8",
             "9", "10", "jack", "queen", "king"]
-    yield from bot.say(random.choice(nums) + " of " + random.choice(suits))
+    await ctx.send(random.choice(nums) + " of " + random.choice(suits))
 
 @bot.command()
-@asyncio.coroutine
-def uptime():
+async def uptime(ctx):
     """
     Get shrub_bot's uptime.
     """
-    yield from bot.say("Uptime: " + str(subprocess.check_output(["uptime", "-p"]))[2:-3])
+    await ctx.send("Uptime: " + str(subprocess.check_output(["uptime", "-p"]))[2:-3])
 
 @bot.event
-@asyncio.coroutine
-def on_message(message):
+async def on_message(message):
+    if message.content.startswith("!peenis"):
+        await bot.close()
     if message.content.startswith("!"):
-        yield from bot.process_commands(message)
+        await bot.process_commands(message)
         return
     noises = ["sqwak",
             "scree",
@@ -179,7 +169,7 @@ def on_message(message):
             "screech"]
     for members in message.mentions:
         if message.author.name != "shrub_bot" and members.name == "shrub_bot":
-            yield from bot.send_message(message.channel, message.content.replace("<@!" + str(bot.user.id) + ">", "").upper() + " " + random.choice(noises))
+            await message.channel.send(message.content.replace("<@!" + str(bot.user.id) + ">", "").upper() + " " + random.choice(noises))
             break
 
 #bot.run("afdsadf@airmail.cc", "SHRUB_BOT2222", bot=True)
