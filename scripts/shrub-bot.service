@@ -1,0 +1,14 @@
+[Unit]
+Description=shrub bot
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=zack
+ExecStart=python3 /home/zack/shrub_bot/shrub_bot.py
+
+[Install]
+WantedBy=multi-user.target
