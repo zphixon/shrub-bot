@@ -14,8 +14,14 @@ from concurrent.futures import ProcessPoolExecutor
 
 #yag = yagmail.SMTP('zack.zslash')
 
+intents = discord.Intents.default()
+intents.members = True
+intents.guilds = True
+intents.messages = True
+intents.message_content = True
+
 #bot = discord.Client()
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='!', intents=intents)
 #discord.opus.load_opus("libopus.so.0")
 
 @bot.event
