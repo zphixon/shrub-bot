@@ -6,10 +6,10 @@ import random
 import datetime
 import sys
 import subprocess
-import tomllib
+import toml
 
 config_file = sys.argv[1] or 'shrub-bot.toml'
-config = tomllib.load(open(config_file))
+config = toml.load(open(config_file))
 
 intents = discord.Intents.default()
 intents.members = True
