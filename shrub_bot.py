@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
-#import yagmail
-import traceback
+
 import discord
 from discord.ext import commands
 import random
 import datetime
 import sys
-import _thread
-import time
 import subprocess
-from concurrent.futures import ProcessPoolExecutor
-#from send_shrub_email import send_email
+import tomllib
 
-#yag = yagmail.SMTP('zack.zslash')
+config_file = sys.argv[1] or 'shrub-bot.toml'
+config = tomllib.load(open(config_file))
 
 intents = discord.Intents.default()
 intents.members = True
@@ -20,9 +17,7 @@ intents.guilds = True
 intents.messages = True
 intents.message_content = True
 
-#bot = discord.Client()
 bot = commands.Bot(command_prefix='!', intents=intents)
-#discord.opus.load_opus("libopus.so.0")
 
 @bot.event
 async def on_ready():
@@ -178,13 +173,10 @@ async def on_message(message):
             await message.channel.send(message.content.replace("<@!" + str(bot.user.id) + ">", "").upper() + " " + random.choice(noises))
             break
 
-#bot.run("afdsadf@airmail.cc", "SHRUB_BOT2222", bot=True)
 try:
-    #bot.connect()
-    bot.run("NDEzNDg1MDY5MTE0NTQwMDUy.DWZfjA.V69333vWvxIY7rWMh_4MWhJvzaw")
+    bot.run(config['key'])
 except Exception:
-    pass # quality code
+    pass
 
-#bot.logout()
 bot.close()
 
