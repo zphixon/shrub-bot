@@ -3,13 +3,12 @@
 import discord
 from discord.ext import commands
 import random
-import datetime
 import sys
 import subprocess
-import toml
+import tomllib
 
 config_file = sys.argv[1] or 'shrub-bot.toml'
-config = toml.load(open(config_file))
+config = tomllib.load(open(config_file, 'rb'))
 
 intents = discord.Intents.default()
 intents.members = True
@@ -47,7 +46,7 @@ async def parrot(ctx):
             "https://i.imgur.com/JXrbr74.png",
             "http://i.imgur.com/5JMs5fA.jpg",
             "https://i.redd.it/l00qvfi6am9x.jpg",
-            "https://cdn.discordapp.com/attachments/264646094493843456/264646792354725898/amw.png",
+            #"https://cdn.discordapp.com/attachments/264646094493843456/264646792354725898/amw.png",
             ]
     await ctx.send(random.choice(parrotURLs))
 
